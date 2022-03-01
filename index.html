@@ -1,1 +1,12 @@
-<p>hello world?</p>
+
+<h1 style="text-align:center; padding-top:12%;">Welcome <span id="name"></span>!<br>You have: <span id="points"></span> points</h1>
+<div style="text-align: center;"><a href="camera.html"><button>LAUNCH CAMERA TEST</button></a></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+	const setUser = user => {
+    // maybe store user for later use?
+    document.getElementById("name").innerHTML = user["name"];
+    document.getElementById("points").innerHTML = user["points"];
+  }
+</script>
