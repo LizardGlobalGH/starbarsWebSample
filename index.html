@@ -1,12 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta content='width=device-width, initial-scale=1' name='viewport'/>
+  </head>
+  <body>
+    <h1 style="text-align:center; padding-top:12%;">Welcome <span id="name"></span>!<br>You have: <span id="points"></span> points</h1>
 
-<h1 style="text-align:center; padding-top:12%;">Welcome <span id="name"></span>!<br>You have: <span id="points"></span> points</h1>
-<div style="text-align: center;"><a href="camera.html"><button>LAUNCH CAMERA TEST</button></a></div>
+    <div style="text-align: center;">
+      <a href="camera.html">
+        <button style="padding: 15px; margin: 15px">LAUNCH CAMERA</button>
+      </a>
+    </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-	const setUser = user => {
-    // maybe store user for later use?
-    document.getElementById("name").innerHTML = user["name"];
-    document.getElementById("points").innerHTML = user["points"];
-  }
-</script>
+    <div style="text-align: center;">
+      <button style="padding: 15px; margin: 15px" id="testBtn0">Request User Data</button>
+    </div>
+
+    <div style="text-align: center;">
+      <button style="padding: 15px; margin: 15px" id="testBtn1">Test Native Navigation</button>
+    </div>
+
+    <div style="text-align: center;">
+      <button style="padding: 15px; margin: 15px" id="testBtn2">Test GraphQL Query</button>
+    </div>
+
+    <div id="queryResponse">query</div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+      const setUser = user => {
+        // maybe store user for later use?
+        document.getElementById("name").innerHTML = user["name"];
+        document.getElementById("points").innerHTML = user["points"];
+      }
+
+      const queryResult = result => {
+        document.getElementById("queryResponse").innerHTML = JSON.stringify(result, undefined, 2);
+      }
+
+      const sendMessageToHost = (type, args, callback) => {
+        if (window.ReactNativeWebView) {
+          window.ReactNativeWebView.postMessage(JSON.stringify({type, args, callback}), '*');
+        }
+      }
+
+      $(document).ready(() => {
+        sendMessageToHost('getUser', [], 'setUser');
+      });
+
+      document.getElementById("testBtn0").addEventListener("click", () => {
+        sendMessageToHost('getUser', [], 'setUser');
+      }, false);
+
+      document.getElementById("testBtn1").addEventListener("click", () => {
+        sendMessageToHost('navigateTo', ['rewards']);
+      }, false);
+
+      document.getElementById("testBtn2").addEventListener("click", () => {
+        const query = `
+          me {
+            firstName
+            lastName
+            email
+          }
+        `;
+        sendMessageToHost('gql', [query], 'queryResult');
+      }, false);
+    </script>
+  </body>
+</html>
