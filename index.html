@@ -40,7 +40,7 @@
 
       const sendMessageToHost = (type, args, callback) => {
         if (window.ReactNativeWebView) {
-          window.ReactNativeWebView.postMessage(JSON.stringify({type, args, callback}), '*');
+          window.ReactNativeWebView.postMessage(JSON.stringify({type, args, callback}));
         }
       }
 
